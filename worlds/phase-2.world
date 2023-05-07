@@ -1,0 +1,397 @@
+<sdf version='1.6'>
+  <world name='default'>
+    <plugin name="ros_link_attacher_plugin" filename="libgazebo_ros_link_attacher.so"/>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+      <physics name='default_physics' default='0' type='ode'>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>10</iters>
+          <sor>1.3</sor>
+          <use_dynamic_moi_rescaling>0</use_dynamic_moi_rescaling>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+    <gravity>0 0 -9.8066</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>65535</collide_bitmask>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <model name='asphalt_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>20 20 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <box>
+              <size>20 20 0.1</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://asphalt_plane/materials/scripts</uri>
+              <uri>model://asphalt_plane/materials/textures</uri>
+              <name>vrc/asphalt</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+
+    <state world_name='default'>
+      <sim_time>248 468000000</sim_time>
+      <real_time>248 822373451</real_time>
+      <wall_time>1590525567 717207139</wall_time>
+      <iterations>62117</iterations>
+<!--      <model name='bishop-terrain'>-->
+<!--        <pose frame=''>23.6349 -18.1035 7.75309 0 -0 0</pose>-->
+<!--        <scale>1 1 1</scale>-->
+<!--        <link name='link'>-->
+<!--          <pose frame=''>23.6349 -18.1035 7.75309 0 -0 0</pose>-->
+<!--          <velocity>0 0 0 0 -0 0</velocity>-->
+<!--          <acceleration>0 0 0 0 -0 0</acceleration>-->
+<!--          <wrench>0 0 0 0 -0 0</wrench>-->
+<!--        </link>-->
+<!--      </model>-->
+<!--      <model name='mars_jezero'>-->
+<!--        <pose frame=''>-46.9567 -2103.99 706.411 0 -0 0</pose>-->
+<!--        <scale>1 1 1</scale>-->
+<!--        <link name='link'>-->
+<!--          <pose frame=''>-46.9567 -2103.99 706.411 0 -0 0</pose>-->
+<!--          <velocity>0 0 0 0 -0 0</velocity>-->
+<!--          <acceleration>0 0 0 0 -0 0</acceleration>-->
+<!--          <wrench>0 0 0 0 -0 0</wrench>-->
+<!--        </link>-->
+<!--      </model>-->
+      <model name='sample_probe'>
+        <pose frame=''>84.724 -54.4061 17.8952 0.183042 -0.069033 -0.37041</pose>
+        <scale>1 1 1</scale>
+        <link name='base_link'>
+          <pose frame=''>84.724 -54.4061 17.8952 0.183042 -0.069033 -0.37041</pose>
+          <velocity>-0.006425 -0.007709 -0.021989 0.143343 -0.124301 0.00176</velocity>
+          <acceleration>-1.12852 -1.18623 -6.85058 0.274915 -1.39809 -3.04738</acceleration>
+          <wrench>-0.112852 -0.118623 -0.685058 0 -0 0</wrench>
+        </link>
+        <link name='probe_camera_up'>
+          <pose frame=''>84.7111 -54.4207 17.9933 1.93359 -1.37519 -2.29784</pose>
+          <velocity>-0.018812 -0.022064 -0.025872 0.152032 -0.132614 0.001956</velocity>
+          <acceleration>-3.84782 -4.06477 -7.68515 1.68672 -0.463946 2.93403</acceleration>
+          <wrench>-0.057717 -0.060972 -0.115277 0 -0 0</wrench>
+        </link>
+      </model>
+
+      <light name='sun'>
+        <pose frame=''>0 0 8 0.873703 -0.557883 -0.769126</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>-6.31105 -44.3341 4.97543 0 0.023628 1.37616</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+        <clip>
+          <near>0.1</near>
+          <far>1000</far>
+        </clip>
+      </camera>
+    </gui>
+    <model name='sample_probe'>
+      <link name='base_link'>
+        <inertial>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.0004</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0004</iyy>
+            <iyz>0</iyz>
+            <izz>0.0005</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <velocity_decay/>
+        <gravity>1</gravity>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.1</radius>
+              <length>0.15</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 0.1 1</ambient>
+            <diffuse>1 0.1 0.2 1</diffuse>
+            <specular>0 0 0 0</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+        <collision name='base_link_inertia_collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.1</radius>
+              <length>0.15</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+      </link>
+      <pose frame=''>-2.29391 -2.27848 0 1.57046 3.7e-05 -0.00352</pose>
+      <link name='probe_camera_up'>
+        <pose frame=''>-0 -0 0.1 -9.4e-05 -1.57079 -9.4e-05</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.015</mass>
+          <inertia>
+            <ixx>1e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1e-06</iyy>
+            <iyz>0</iyz>
+            <izz>1e-06</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <sensor name='camera' type='camera'>
+          <always_on>1</always_on>
+          <update_rate>30</update_rate>
+          <camera name='__default__'>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>1000</far>
+            </clip>
+            <horizontal_fov>1.047</horizontal_fov>
+          </camera>
+          <plugin name='camera_plugin' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>true</alwaysOn>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <updateRate>10.0</updateRate>
+            <cameraName>probe_camera_up</cameraName>
+            <frameName>probe_camera_up</frameName>
+            <CxPrime>320.5</CxPrime>
+            <Cx>320.5</Cx>
+            <Cy>240.5</Cy>
+            <hackBaseline>0</hackBaseline>
+            <focalLength>554.382713</focalLength>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+        </sensor>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.001 0.001 0.001</size>
+            </box>
+          </geometry>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+          <material>
+            <shader type='pixel'/>
+          </material>
+        </visual>
+      </link>
+      <joint name='probe_cam_joint_up' type='revolute'>
+        <parent>base_link</parent>
+        <child>probe_camera_up</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <use_parent_model_frame>1</use_parent_model_frame>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <physics>
+          <ode>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+            <suspension>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </suspension>
+          </ode>
+        </physics>
+      </joint>
+    </model>
+<!--    <model name='mars_jezero'>-->
+<!--      <pose frame=''>0.401324 0.824087 8 0 -0 0</pose>-->
+<!--      <static>1</static>-->
+<!--      <link name='link'>-->
+<!--        <collision name='collision'>-->
+<!--          <geometry>-->
+<!--            <mesh>-->
+<!--              <uri>model://mars_jezero/meshes/mars.stl</uri>-->
+<!--            </mesh>-->
+<!--          </geometry>-->
+<!--          <max_contacts>10</max_contacts>-->
+<!--          <surface>-->
+<!--            <contact>-->
+<!--              <ode/>-->
+<!--            </contact>-->
+<!--            <bounce/>-->
+<!--            <friction>-->
+<!--              <torsional>-->
+<!--                <ode/>-->
+<!--              </torsional>-->
+<!--              <ode/>-->
+<!--            </friction>-->
+<!--          </surface>-->
+<!--        </collision>-->
+<!--        <visual name='visual'>-->
+<!--          <geometry>-->
+<!--            <mesh>-->
+<!--              <uri>model://mars_jezero/meshes/mars.stl</uri>-->
+<!--            </mesh>-->
+<!--          </geometry>-->
+<!--          <material>-->
+<!--            <ambient>0.5 0.5 0.5 1</ambient>-->
+<!--            <diffuse>0.9 0.49 0.06 1</diffuse>-->
+<!--            <specular>0 0 0 0</specular>-->
+<!--            <emissive>0 0 0 1</emissive>-->
+<!--          </material>-->
+<!--        </visual>-->
+<!--        <self_collide>0</self_collide>-->
+<!--        <kinematic>0</kinematic>-->
+<!--      </link>-->
+<!--    </model>-->
+    <include>
+      <uri>model://washer</uri>
+      <pose frame=''>-76 425 -22.56 -0.007497 0.259145 -0.37356</pose>
+    </include>
+  </world>
+</sdf>
