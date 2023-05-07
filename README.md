@@ -10,12 +10,18 @@ Register on https://cps-vo.org/group/CPSchallenge to get access to pre-configure
 Or you can clone and build using https://github.com/Open-UAV/cps_challenge_2020.git
 
 
-Follow below instruction to clone the repo in the cps_challenge_2020 folder
+Apriltag & Apriltag_ros (v2 or v3) Install any dependencies for apriltag from https://github.com/AprilRobotics/apriltag_ros
 ```
-cd cps_challenge_2020
+cd ~/catkin_ws/src
+git clone --recursive https://github.com/AprilRobotics/apriltag_ros
+git clone --recursive https://github.com/AprilRobotics/apriltag
 ```
+
+Follow below instruction to clone and build the code![Studio_Project (1)](https://user-images.githubusercontent.com/97504177/236708959-100a0d4e-8fb0-4113-8710-c076d8596115.gif)
+
 ```
 git clone https://github.com/skp-1997/landing_on_moving_rover.git
+catkin build
 ```
 
 # Running the code
