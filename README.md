@@ -50,3 +50,11 @@ python move_rover.py
 1. Provide correct camera path of the quadcopter into the continuous_detection.launch file in ./apriltag_ros/launch/
 2. Edit the settings.yaml and tag.yaml in ./apriltag_ros/config as per your apriltag
 3. Add the continuous_detection.launch file in /cps_challenge/launch/phase-2.launch file, which will run the april_tag ros when you run the phase-2.launch
+
+
+# Pre-requisites
+
+1. Python 2.7
+2. Ubuntu 18.04
+3. ROS1 MELODIC
+4. Gazebo 9.6
