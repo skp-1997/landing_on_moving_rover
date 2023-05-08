@@ -12,6 +12,7 @@ Or you can clone and build using https://github.com/Open-UAV/cps_challenge_2020.
 
 
 Apriltag & Apriltag_ros (v2 or v3) Install any dependencies for apriltag from https://github.com/AprilRobotics/apriltag_ros
+[ Make sure you have made all necessary changes in the apriltag_ros to link it with the gazebo! ]
 ```
 cd ~/catkin_ws/src
 git clone --recursive https://github.com/AprilRobotics/apriltag_ros
@@ -44,3 +45,8 @@ python autonomous_landing.py
 python move_rover.py
 ```
 
+# Setup of apriltag_ros folder
+
+1. Provide correct camera path of the quadcopter into the continuous_detection.launch file in ./apriltag_ros/launch/
+2. Edit the settings.yaml and tag.yaml in ./apriltag_ros/config as per your apriltag
+3. Add the continuous_detection.launch file in /cps_challenge/launch/phase-2.launch file, which will run the april_tag ros when you run the phase-2.launch
