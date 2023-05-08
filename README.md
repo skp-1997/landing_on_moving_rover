@@ -2,6 +2,7 @@
 This project intends to land a quad-copter on a moving rover using Visual Servoing.
 
 # Demonstration
+![Studio_Project (2)](https://user-images.githubusercontent.com/97504177/236709060-351487da-2213-4cca-b190-518aad6e828a.gif)
 
 
 # Installation
@@ -17,7 +18,11 @@ git clone --recursive https://github.com/AprilRobotics/apriltag_ros
 git clone --recursive https://github.com/AprilRobotics/apriltag
 ```
 
-Follow below instruction to clone and build the code![Studio_Project (1)](https://user-images.githubusercontent.com/97504177/236708959-100a0d4e-8fb0-4113-8710-c076d8596115.gif)
+Follow below instruction to clone and build the code
+
+
+
+
 
 ```
 git clone https://github.com/skp-1997/landing_on_moving_rover.git
