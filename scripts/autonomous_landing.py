@@ -31,10 +31,7 @@ class Mission:
         self.KP = 0.01
         self.KD = 0.0000
         self.KI = 0.00000
-
         self.rate = rospy.Rate(40)
-        self.t0 = rospy.get_time()
-
         self.rock_vec = np.array([60.2, -12.5, 18])
         self.probe_vec = np.array([40.5, 3.8, 15])
         self.rover_vec = np.array([12.6, -65.0, -3.5])
@@ -42,10 +39,10 @@ class Mission:
         self.distThr = 0.2
 
         self.local_pose_pub = rospy.Publisher("/uav1/mavros/setpoint_position/local", PoseStamped, queue_size=10)
-        self.local_pose_sub = rospy.Subscriber("/uav1/mavros/local_position/pose", PoseStamped, callback=self.pose_cb)
-        self.rover_pose_sub = rospy.Subscriber("/uav0/mavros/local_position/pose", PoseStamped, callback=self.rover_cb)
-        state_sub = rospy.Subscriber("/uav1/mavros/state", State, callback=self.status_cb)
-        tag_detect = rospy.Subscriber('/tag_detections', AprilTagDetectionArray, callback=self.tag_detections)
+        self.local_pose_sub = rospy.Subscriber("/uav1/mavros/local_position/pose", PoseStamped, callback=self._pose_cb)
+        self.rover_pose_sub = rospy.Subscriber("/uav0/mavros/local_position/pose", PoseStamped, callback=self._rover_cb)
+        state_sub = rospy.Subscriber("/uav1/mavros/state", State, callback=self._status_cb)
+        tag_detect = rospy.Subscriber('/tag_detections', AprilTagDetectionArray, callback=self._tag_detections)
         self.vel_pub = rospy.Publisher('/uav1/mavros/setpoint_raw/local', PositionTarget, queue_size=10)
 
         self.pose = PoseStamped()
@@ -54,7 +51,7 @@ class Mission:
         self.pose.pose.position.y = 0
         self.pose.pose.position.z = 2
 
-    def setmode_offb(self):
+    def _setmode_offb(self):
         rospy.wait_for_service("/uav1/mavros/cmd/arming")
         arming_client = rospy.ServiceProxy("/uav1/mavros/cmd/arming", CommandBool)
         rospy.wait_for_service("/uav1/mavros/set_mode")
@@ -70,16 +67,12 @@ class Mission:
             if rospy.is_shutdown():
                 break
             self.local_pose_pub.publish(self.goal_pose)
-            print("Check 2")
             self.rate.sleep()
-
-
 
         last_req = rospy.Time.now()
         while not rospy.is_shutdown():  # and not self.offboardCheck:
 
             if self.drone_status.mode != "OFFBOARD" and (rospy.Time.now() - last_req) > rospy.Duration(2.0):
-                print("Check 3")
                 if set_mode_client.call(offb_set_mode).mode_sent:
                     # self.offboardCheck = True
                     rospy.loginfo("OFFBOARD enabled")
@@ -88,12 +81,10 @@ class Mission:
                 last_req = rospy.Time.now()
             else:  # if A*B else !(A*B) = !A + !B
                 if not self.drone_status.armed and (rospy.Time.now() - last_req) > rospy.Duration(2.0):
-                    print("Check 4")
                     if arming_client.call(arm_cmd).success == True:
                         rospy.loginfo("Vehicle armed")
                     last_req = rospy.Time.now()
             if self.drone_status.mode == "OFFBOARD" and self.drone_status.armed:
-                print("third IF--------")
                 if (rospy.Time.now() - last_req) > rospy.Duration(5.0):
                     # last_req = rospy.Time.now()
                     break
@@ -109,9 +100,6 @@ class Mission:
         # print(self.curr)
         d = get_dist(self.curr, des)
         while d > self.distThr and not rospy.is_shutdown():
-            # print("Drone pose received", self.curr)
-            # self.curr = self.currPose.pose.position
-            # print(d, '--' , self.curr, '--' , self.des)
             azimuth = math.atan2(self.rock_vec[1] - self.present_pose.pose.position.y,
                                  self.rock_vec[0] - self.present_pose.pose.position.x)
             # print(azimuth)
@@ -133,8 +121,7 @@ class Mission:
                 print(q)
                 break
 
-    def goto_rover(self):
-        print("=== GO to rock and Face rock ========")
+    def _goto_rover(self):
         locations = np.matrix([[self.rovr_pose.x, self.rovr_pose.y + 2, 7.0], ])
         # locations = np.matrix([[-1.0, 0.0, 7.0], ])
         for waypt in locations:
@@ -152,7 +139,7 @@ class Mission:
         des_vel.velocity.z = z
         return des_vel
 
-    def descent(self):
+    def _descent(self):
         rate = rospy.Rate(40)
         self.x_change = 1
         self.y_change = 1
@@ -206,19 +193,19 @@ class Mission:
 
                 if self.curr.z < 2.0:
                     print("landing")
-                    self.land_on_rover()
+                    self._land_on_position()
                     break
 
         print('Exiting while in decent')
 
-    def follow_rover(self)
+    def _follow_rover(self)
         self.correct_pose.pose.position.x = self.rovr_pose.x
         self.correct_pose.pose.position.y = self.rovr_pose.y
         self.correct_pose.pose.position.z = self.curr.z
         print(self.correct_pose.pose.position.x, self.correct_pose.pose.position.y, self.correct_pose.pose.position.z)
         self.local_pose_pub.publish(self.correct_pose)
 
-    def land_on_rover(self):
+    def _land_on_position(self):
         print("Started to land")
         local_pos_pub = rospy.Publisher('/uav1/mavros/setpoint_raw/local', PositionTarget, queue_size=10)
         arm_service = rospy.ServiceProxy('/uav1/mavros/cmd/arming', CommandBool)
@@ -230,7 +217,6 @@ class Mission:
         landing_position.type_mask = PositionTarget.IGNORE_VX + PositionTarget.IGNORE_VY + PositionTarget.IGNORE_VZ \
                                      + PositionTarget.IGNORE_AFX + PositionTarget.IGNORE_AFY + PositionTarget.IGNORE_AFZ \
                                      + PositionTarget.IGNORE_YAW + PositionTarget.IGNORE_YAW_RATE
-        # Publish the landing position command
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             local_pos_pub.publish(landing_position)
@@ -239,17 +225,17 @@ class Mission:
                 print("Landed =========")
                 arm_service(False)
 
-    def pose_cb(self, points):
+    def _pose_cb(self, points):
         self.present_pose = points
         self.curr = self.present_pose.pose.position
 
-    def status_cb(self, data):
+    def _status_cb(self, data):
         self.drone_status = data
 
-    def update_state_cb(self, state):
+    def _update_state_cb(self, state):
         self.mode = state.data
 
-    def tag_detections(self, msgs):
+    def _tag_detections(self, msgs):
         rate = rospy.Rate(30)
         if len(msgs.detections) > 0:
             msg = msgs.detections[0].pose
@@ -259,16 +245,15 @@ class Mission:
             self.tag_pt = None
             self.tag_ori = None
 
-    def rover_cb(self, msg):
+    def _rover_cb(self, msg):
         self.rovr_pose = msg.pose.position
 
     def launch(self):
         self.rate.sleep()
-        self.setmode_offb()
+        self._setmode_offb()
         while not rospy.is_shutdown():
-            self.goto_rover()
-            self.descent()
-            print("Out of while")
+            self._goto_rover()
+            self._descent()
 
 
 def main():
